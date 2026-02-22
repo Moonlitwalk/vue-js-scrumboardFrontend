@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+}

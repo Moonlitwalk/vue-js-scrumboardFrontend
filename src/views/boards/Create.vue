@@ -1,3 +1,24 @@
+<script setup>
+import { ref } from 'vue';
+import { createBoard } from '../../services/boardService';
+const owner = ref('');
+const title = ref('');
+const description = ref('');
+
+async function submit() {
+  try {
+    const response = await createBoard({
+      owner: owner.value,
+      title: title.value,
+      description: description.value,
+    });
+    console.log('Erfolg:', response.data);
+  } catch (error) {
+    console.error('Fehler:', error);
+  }
+}
+</script>
+
 <template>
   <div>
     <h1>Create Board</h1>
@@ -11,19 +32,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-
-const owner = ref('');
-const title = ref('');
-const description = ref('');
-
-function submit() {
-  console.log({
-    owner: owner.value,
-    title: title.value,
-    description: description.value,
-  });
-}
-</script>
