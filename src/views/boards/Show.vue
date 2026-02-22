@@ -1,10 +1,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { getBoard } from '../../services/boardService';
-
+import { getBoard, deleteBoard } from '../../services/boardService';
+import { useRouter } from 'vue-router';
 const route = useRoute();
-
+const router = useRouter();
 const board = ref(null);
 const loading = ref(true);
 const error = ref(false);
@@ -21,6 +21,19 @@ async function fetchBoard() {
   }
 }
 
+async function handleDelete() {
+  const confirmed = confirm('Board wirklich löschen?');
+
+  if (!confirmed) return;
+
+  try {
+    await deleteBoard(board.value.id);
+    router.push('/boards');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 onMounted(() => {
   fetchBoard();
 });
@@ -33,6 +46,15 @@ onMounted(() => {
 
     <div v-else-if="board">
       <h1>{{ board.title }}</h1>
+      <router-link
+        :to="{ name: 'boards.edit', params: { id: board.id } }"
+        class="edit-button"
+      >
+        Edit
+      </router-link>
+      <button type="button" @click="handleDelete" class="delete-button">
+        Delete
+      </button>
       <p><strong>Owner:</strong> {{ board.owner }}</p>
       <p>{{ board.description }}</p>
     </div>

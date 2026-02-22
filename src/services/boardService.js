@@ -11,3 +11,11 @@ export function getBoards() {
 export function getBoard(id) {
   return api.get(`/boards/${id}`);
 }
+
+export function updateBoard(id, data) {
+  return api.put(`/boards/${id}`, data);
+}
+
+export function deleteBoard(id) {
+  return api.delete(`/boards/${id}`);
+}
