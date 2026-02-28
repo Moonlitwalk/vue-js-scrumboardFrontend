@@ -9,33 +9,52 @@ const router = useRouter();
 const owner = ref('');
 const title = ref('');
 const description = ref('');
+
 const loading = ref(true);
-const error = ref(false);
+const loadError = ref(false);
+
+const errors = ref({});
+const message = ref('');
+const isSaving = ref(false);
 
 async function fetchBoard() {
   try {
     const response = await getBoard(route.params.id);
-    owner.value = response.data.owner;
-    title.value = response.data.title;
-    description.value = response.data.description;
+    owner.value = response.data.owner ?? '';
+    title.value = response.data.title ?? '';
+    description.value = response.data.description ?? '';
   } catch (err) {
-    error.value = true;
+    loadError.value = true;
+    message.value = 'Fehler beim Laden.';
+    console.error(err);
   } finally {
     loading.value = false;
   }
 }
 
 async function submit() {
+  message.value = '';
+  errors.value = {};
+  isSaving.value = true;
+
   try {
     await updateBoard(route.params.id, {
       owner: owner.value,
       title: title.value,
       description: description.value,
     });
-
+    message.value = 'Gespeichert!';
     router.push(`/boards/${route.params.id}`);
   } catch (err) {
+    if (err?.response?.status === 422) {
+      errors.value = err.response.data.errors ?? {};
+      message.value = 'Bitte Eingaben prüfen!';
+      return;
+    }
+    message.value = 'Speichern fehlgeschlagen.';
     console.error(err);
+  } finally {
+    isSaving.value = false;
   }
 }
 
@@ -46,17 +65,28 @@ onMounted(fetchBoard);
   <div>
     <div v-if="loading">Lade Board...</div>
 
-    <div v-else-if="error">Fehler beim Laden.</div>
+    <div v-else-if="loadError">Fehler beim Laden.</div>
 
     <div v-else>
       <h1>Edit Board</h1>
-
+      <div v-if="message">{{ message }}</div>
       <form @submit.prevent="submit">
-        <input v-model="owner" placeholder="Owner" />
-        <input v-model="title" placeholder="Title" />
-        <textarea v-model="description" placeholder="Description"></textarea>
+        <div>
+          <input v-model="owner" placeholder="Owner" />
+          <p v-if="errors.owner">{{ errors.owner[0] }}</p>
+        </div>
+        <div>
+          <input v-model="title" placeholder="Title" />
+          <p v-if="errors.title">{{ errors.title[0] }}</p>
+        </div>
+        <div>
+          <textarea v-model="description" placeholder="Description"></textarea>
+          <p v-if="errors.description">{{ errors.description[0] }}</p>
+        </div>
 
-        <button type="submit">Update</button>
+        <button type="submit" :disabled="isSaving">
+          {{ isSaving ? 'Saving...' : 'Update' }}
+        </button>
       </form>
     </div>
   </div>
