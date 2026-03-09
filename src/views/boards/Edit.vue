@@ -44,7 +44,7 @@ async function submit() {
       description: description.value,
     });
     message.value = 'Gespeichert!';
-    router.push(`/boards/${route.params.id}`);
+    //router.push(`/boards/${route.params.id}`);
   } catch (err) {
     if (err?.response?.status === 422) {
       errors.value = err.response.data.errors ?? {};
@@ -87,7 +87,14 @@ onMounted(fetchBoard);
         <button type="submit" :disabled="isSaving">
           {{ isSaving ? 'Saving...' : 'Update' }}
         </button>
+        <router-link
+          :to="{ name: 'board.show', params: { id: route.params.id } }"
+          class="back-button"
+        >
+          back to Board
+        </router-link>
       </form>
     </div>
   </div>
 </template>
+<!--TODO: succesfull edit message handlingo-->

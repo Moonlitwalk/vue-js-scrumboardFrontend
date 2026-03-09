@@ -8,6 +8,7 @@ const router = useRouter();
 const board = ref(null);
 const loading = ref(true);
 const error = ref(false);
+const message = ref('');
 
 async function fetchBoard() {
   try {
@@ -35,6 +36,9 @@ async function handleDelete() {
 }
 
 onMounted(() => {
+  if (route.query.updated) {
+    message.value = 'Board erfolgreich gespeichert';
+  }
   fetchBoard();
 });
 </script>
@@ -45,7 +49,9 @@ onMounted(() => {
     <div v-else-if="error">Fehler beim Laden.</div>
 
     <div v-else-if="board">
+      <div v-if="message">{{ message }}</div>
       <h1>{{ board.title }}</h1>
+
       <router-link
         :to="{ name: 'boards.edit', params: { id: board.id } }"
         class="edit-button"
@@ -55,6 +61,9 @@ onMounted(() => {
       <button type="button" @click="handleDelete" class="delete-button">
         Delete
       </button>
+      <router-link :to="{ name: 'board.index' }" class="back-button">
+        back to Boardlist
+      </router-link>
       <p><strong>Owner:</strong> {{ board.owner }}</p>
       <p>{{ board.description }}</p>
     </div>

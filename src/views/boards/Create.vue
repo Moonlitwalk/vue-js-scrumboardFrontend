@@ -5,6 +5,9 @@ const owner = ref('');
 const title = ref('');
 const description = ref('');
 
+const errors = ref(false);
+const message = ref('');
+
 async function submit() {
   try {
     const response = await createBoard({
@@ -12,9 +15,15 @@ async function submit() {
       title: title.value,
       description: description.value,
     });
-    console.log('Erfolg:', response.data);
+    message.value = 'Board ' + title.value + ' erfolgreich erstellt';
   } catch (error) {
-    console.error('Fehler:', error);
+    if (error?.response?.status === 422) {
+      errors.value = error.response.data.errors ?? {};
+      message.value = 'Bitte Eingaben prüfen!';
+      return;
+    }
+    message.value = 'Erstellung fehlgeschlagen.';
+    console.error(error);
   }
 }
 </script>
@@ -22,7 +31,7 @@ async function submit() {
 <template>
   <div>
     <h1>Create Board</h1>
-
+    <div v-if="message">{{ message }}</div>
     <form @submit.prevent="submit">
       <input v-model="owner" placeholder="Owner" />
       <input v-model="title" placeholder="Title" />
@@ -30,5 +39,9 @@ async function submit() {
 
       <button type="submit">Create</button>
     </form>
+
+    <router-link :to="{ name: 'board.index' }" class="back-button">
+      Back to Board-List
+    </router-link>
   </div>
 </template>
