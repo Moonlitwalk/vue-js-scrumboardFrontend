@@ -23,7 +23,7 @@ const routes = [
   { path: '/tickets', name: 'ticket.index', component: TicketIndex},
   { path: '/tickets/new_ticket', name: 'ticket.create', component: TicketCreate},
   { path: '/tickets/:id', name: 'ticket.show', component: TicketShow},
-  { path: 'tickets/:id/edit', name:'ticket.edit', component: TicketEdit}
+  { path: '/tickets/:id/edit', name:'ticket.edit', component: TicketEdit}
 ];
 
 const router = createRouter({
