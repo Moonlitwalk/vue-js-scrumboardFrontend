@@ -23,7 +23,8 @@ onMounted(() => {
 <template>
     <div>
         <h1>Tickets</h1>
-        <router-link to="">Create Ticket</router-link>
+        <router-link 
+        :to="{ name:'ticket.create' }" class="edit-button">Create Ticket</router-link>
         <div v-if="loading">Lade Tickets...</div>
         <div v-else-if="tickets.length === 0">Keine Tickets vorhanden.</div>
         <ul v-else>

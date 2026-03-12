@@ -1,14 +1,14 @@
 import api from './axios';
 
-export function createTicket(data) {
+export function createTicket(data){
     return api.post('/new_Ticket', data)
 }
 
-export function getTickets() {
+export function getTickets(){
     return api.get('/tickets');
 }
 
-export function getTicket(id) {
+export function getTicket(id){
     return api.get(`/tickets/${id}`);
 }
 

@@ -16,7 +16,7 @@ const routes = [
   { path: '/boards', name: 'board.index', component: BoardIndex },
   { path: '/boards/create', component: BoardCreate },
   { path: '/boards/:id', name: 'board.show', component: BoardShow },
-  { path: '/boards/:id/edit', name: 'boards.edit', component: BoardEdit },
+  { path: '/boards/:id/edit', name: 'board.edit', component: BoardEdit },
 
   //ticket routes
   { path: '/', redirect: '/tickets'},

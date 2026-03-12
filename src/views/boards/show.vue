@@ -10,7 +10,7 @@ const loading = ref(true);
 const error = ref(false);
 const message = ref('');
 
-async function fetchBoard() {
+async function fetchBoard(){
   try {
     const response = await getBoard(route.params.id);
     board.value = response.data;
@@ -22,7 +22,7 @@ async function fetchBoard() {
   }
 }
 
-async function handleDelete() {
+async function handleDelete(){
   const confirmed = confirm('Board wirklich löschen?');
 
   if (!confirmed) return;
@@ -36,7 +36,7 @@ async function handleDelete() {
 }
 
 onMounted(() => {
-  if (route.query.updated) {
+  if (route.query.updated){
     message.value = 'Board erfolgreich gespeichert';
   }
   fetchBoard();
@@ -53,10 +53,10 @@ onMounted(() => {
       <h1>{{ board.title }}</h1>
 
       <router-link
-        :to="{ name: 'boards.edit', params: { id: board.id } }"
+        :to="{ name: 'board.edit', params: { id: board.id } }"
         class="edit-button"
       >
-        Edit
+        Edit Board
       </router-link>
       <button type="button" @click="handleDelete" class="delete-button">
         Delete
