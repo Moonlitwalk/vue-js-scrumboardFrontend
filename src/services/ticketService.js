@@ -1,7 +1,7 @@
 import api from './axios';
 
 export function createTicket(data){
-    return api.post('/new_Ticket', data)
+    return api.post('/new_ticket', data)
 }
 
 export function getTickets(){
