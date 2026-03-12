@@ -17,6 +17,7 @@ async function submit() {
     });
     message.value = 'Board ' + title.value + ' erfolgreich erstellt';
   } catch (error) {
+    //“Check if error.response.status equals 422 — but only if error and error.response exist.” safely accesses nested properties
     if (error?.response?.status === 422) {
       errors.value = error.response.data.errors ?? {};
       message.value = 'Bitte Eingaben prüfen!';
