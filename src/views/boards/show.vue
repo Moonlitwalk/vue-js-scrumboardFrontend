@@ -4,6 +4,9 @@ import { onMounted, ref } from 'vue';
 import { getBoard, deleteBoard } from '../../services/boardService';
 import { useRouter } from 'vue-router';
 import TicketList from '../../components/tickets/TicketList.vue';
+import CreateTicketModal from '../../components/tickets/CreateTicketModal.vue';
+
+const showModal = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -35,6 +38,14 @@ async function handleDelete() {
   } catch (err) {
     console.error(err);
   }
+}
+
+function openModal() {
+  showModal.value = true;
+}
+
+function closeModal() {
+  showModal.value = false;
 }
 
 onMounted(() => {
@@ -69,6 +80,12 @@ onMounted(() => {
       <p><strong>Owner:</strong> {{ board.owner }}</p>
       <p>{{ board.description }}</p>
       <ticket-list :tickets="board.tickets" />
+      <button @click="openModal">Create Ticket</button>
+      <CreateTicketModal
+        v-if="showModal"
+        :board-id="board.id"
+        @close="closeModal"
+      />
     </div>
 
     <div v-else>Board nicht gefunden.</div>

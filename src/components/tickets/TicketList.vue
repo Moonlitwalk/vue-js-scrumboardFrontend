@@ -14,7 +14,10 @@ defineProps({
 
     <ul v-else>
       <li v-for="ticket in tickets" :key="ticket.id">
-        {{ ticket.title }}
+        #{{ ticket.id }}
+        <router-link :to="{ name: 'ticket.show', params: { id: ticket.id } }">{{
+          ticket.title
+        }}</router-link>
       </li>
     </ul>
   </div>
