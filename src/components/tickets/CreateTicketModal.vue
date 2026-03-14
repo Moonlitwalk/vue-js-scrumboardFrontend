@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-
+import { createTicket } from '../../services/ticketService';
 const props = defineProps({
   boardId: Number,
 });
@@ -10,11 +10,30 @@ const title = ref('');
 const description = ref('');
 const owner = ref('');
 const type = ref('');
+const message = ref('');
+const error = ref(false);
 
-function submitTicket() {
-  console.log('Createing ticket for board', props.boardId);
-  //api call
-  emit('close');
+async function submitTicket() {
+  try {
+    const response = await createTicket({
+      scrumboard_id: props.boardId,
+      title: title.value,
+      description: description.value,
+      owner: owner.value,
+      type: type.value,
+    });
+    message.value = title.value + ' erfolgreich erstellt! ';
+  } catch (error) {
+    //“Check if error.response.status equals 422 — but only if error and error.response exist.” safely accesses nested properties
+    if (error?.response?.status === 422) {
+      error.value = error.response.data.erros ?? {};
+      message.value = 'Bitte Eingaben prüfen!';
+      return;
+    }
+    message.value = 'Erstellung des Tickets fehlgeschlagen';
+    console.error(error);
+    emit('close');
+  }
 }
 </script>
 <template>

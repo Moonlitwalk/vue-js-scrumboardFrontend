@@ -26,6 +26,7 @@ async function submit() {
     if (error?.response?.status === 422) {
       errors.value = error.response.data.erros ?? {};
       message.value = 'Bitte Eingaben prüfen!';
+      return;
     }
     message.value = 'Erstellung des Tickets fehlgeschlagen';
     console.error(error);
