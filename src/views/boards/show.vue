@@ -3,6 +3,8 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { getBoard, deleteBoard } from '../../services/boardService';
 import { useRouter } from 'vue-router';
+import TicketList from '../../components/tickets/TicketList.vue';
+
 const route = useRoute();
 const router = useRouter();
 const board = ref(null);
@@ -10,7 +12,7 @@ const loading = ref(true);
 const error = ref(false);
 const message = ref('');
 
-async function fetchBoard(){
+async function fetchBoard() {
   try {
     const response = await getBoard(route.params.id);
     board.value = response.data;
@@ -22,7 +24,7 @@ async function fetchBoard(){
   }
 }
 
-async function handleDelete(){
+async function handleDelete() {
   const confirmed = confirm('Board wirklich löschen?');
 
   if (!confirmed) return;
@@ -36,7 +38,7 @@ async function handleDelete(){
 }
 
 onMounted(() => {
-  if (route.query.updated){
+  if (route.query.updated) {
     message.value = 'Board erfolgreich gespeichert';
   }
   fetchBoard();
@@ -66,6 +68,7 @@ onMounted(() => {
       </router-link>
       <p><strong>Owner:</strong> {{ board.owner }}</p>
       <p>{{ board.description }}</p>
+      <ticket-list :tickets="board.tickets" />
     </div>
 
     <div v-else>Board nicht gefunden.</div>
