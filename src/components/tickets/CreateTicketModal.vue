@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { createTicket } from '../../services/ticketService';
+import { storeTicket } from '../../services/ticketService';
 const props = defineProps({
   boardId: Number,
 });
@@ -15,8 +15,7 @@ const error = ref(false);
 
 async function submitTicket() {
   try {
-    const response = await createTicket({
-      scrumboard_id: props.boardId,
+    const response = await storeTicket(props.boardId,{
       title: title.value,
       description: description.value,
       owner: owner.value,

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { createTicket } from '../../services/ticketService';
+import { storeTicket } from '../../services/ticketService';
 
 const scrumboardId = ref('');
 const title = ref('');
@@ -13,7 +13,7 @@ const errors = ref(false);
 
 async function submit() {
   try {
-    const response = await createTicket({
+    const response = await storeTicket({
       scrumboard_id: scrumboardId.value,
       title: title.value,
       description: description.value,
